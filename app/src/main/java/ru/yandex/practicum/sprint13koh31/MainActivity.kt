@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartEmptyView()
             }
             onAddCountClickListener = OnAddCountClickListener { item ->
                 catalogItems = catalogItems.map {
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartEmptyView()
             }
             onRemoveCountClickListener = OnRemoveCountClickListener { item ->
                 catalogItems = catalogItems.map {
@@ -127,9 +129,19 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartEmptyView()
             }
         }
     }
+
+    private fun updateCartEmptyView() {
+        binding.cartEmptyTitle.visibility = if (cartItems.isEmpty()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
 
     private fun setUpCart() {
         binding.cartItemsList.apply {
@@ -148,6 +160,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
+                updateCartEmptyView()
                 cartItemsAdapter.setItems(cartItems)
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
@@ -158,9 +171,11 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
+                updateCartEmptyView()
                 cartItemsAdapter.setItems(cartItems)
             }
         }
+        updateCartEmptyView()
     }
 
     private fun onBottomNavigationItemSelected(itemId: Int): Boolean {
