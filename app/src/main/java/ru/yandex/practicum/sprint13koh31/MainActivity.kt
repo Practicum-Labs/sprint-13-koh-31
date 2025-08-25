@@ -119,11 +119,19 @@ class MainActivity : AppCompatActivity() {
                 catalogItemsAdapter.setItems(catalogItems)
             }
             onRemoveCountClickListener = OnRemoveCountClickListener { item ->
-                catalogItems = catalogItems.map {
-                    if (it.id == item.id) {
-                        it.copy(count = (it.count ?: 0) - 1)
+                catalogItems = catalogItems.map { catalogItem ->
+                    if (catalogItem.id == item.id) {
+                        if (catalogItem.count == 1) {
+                            cartItems = cartItems.toMutableList().apply {
+                                removeIf { cartItem ->
+                                    cartItem.catalogItem.id == catalogItem.id
+                                }
+                            }
+                            cartItemsAdapter.setItems(cartItems)
+                        }
+                        catalogItem.copy(count = (catalogItem.count ?: 0) - 1)
                     } else {
-                        it
+                        catalogItem
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
