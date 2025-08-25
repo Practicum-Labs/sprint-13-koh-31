@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
+        updateCartBadge()
         changeCurrentScreenMode(ScreenMode.CATALOG)
         binding.toolbar.setTitle(R.string.catalog_title)
         binding.bottomNavigation.selectedItemId = R.id.catalog
@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartBadge()
             }
             onAddCountClickListener = OnAddCountClickListener { item ->
                 catalogItems = catalogItems.map {
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartBadge()
             }
             onRemoveCountClickListener = OnRemoveCountClickListener { item ->
                 catalogItems = catalogItems.map {
@@ -127,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 catalogItemsAdapter.setItems(catalogItems)
+                updateCartBadge()
             }
         }
     }
@@ -149,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 cartItemsAdapter.setItems(cartItems)
+                updateCartBadge()
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -159,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 cartItemsAdapter.setItems(cartItems)
+                updateCartBadge()
             }
         }
     }
@@ -176,6 +181,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             else -> false
+        }
+    }
+
+    private fun updateCartBadge() {
+        val cartItemCount = cartItems.sumOf { it.count }
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.cart)
+        if (cartItemCount > 0) {
+            badge.isVisible = true
+            badge.number = cartItemCount
+        } else {
+            badge.isVisible = false
         }
     }
 
